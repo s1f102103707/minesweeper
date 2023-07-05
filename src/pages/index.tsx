@@ -44,10 +44,33 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
+  //const board: number[][] = [];
+  //let zeroList: { x: number; y: number }[]
+  //for () {
+  //zeroList = // board + directions + userInputs + bombMap
+  //}
+  //let openedCount: number
+  //for () {
+  //openedCount = // board
+  //}
+  //const isSuccess = // openedCount + bombCount
+  //let isFailure: boolean
+  //for () {
+  //isFailure = // userInputs + bombMap
+  //}
+  //let isStarted: boolean
+  //for () {
+  //isStarted = // userInputs
+  //}
+
   const onClick = (x: number, y: number) => {
     console.log(x, y);
     const newMap: number[][] = JSON.parse(JSON.stringify(userInputs));
   };
+  //再帰関数
+  //const addZeroAroundZero = (hoge: fuga) => ... // 再帰関数
+  //const clickStone = (x: number, y: number) => ...
+  //const reset = () => ...
 
   const isPlaying = userInputs.some((row) => row.some((input) => input !== 0));
   const isFailure = userInputs.some((row, y) =>
