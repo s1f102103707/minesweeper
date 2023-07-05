@@ -18,6 +18,7 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
+
   const directions = [
     [-1, 0],
     [-1, -1],
@@ -28,6 +29,7 @@ const Home = () => {
     [0, 1],
     [-1, 1],
   ];
+
   const bombCount = 10;
   // 0 -> ボムなし
   // 1 -> ボムあり
@@ -66,6 +68,20 @@ const Home = () => {
   const onClick = (x: number, y: number) => {
     console.log(x, y);
     const newMap: number[][] = JSON.parse(JSON.stringify(userInputs));
+
+    const updatedUserInput = [...userInputs];
+    updatedUserInput[y][x] = 1;
+    setUserInputs(updatedUserInput);
+
+    //爆弾の設置
+    for (let i = 0; i < bombCount; i++) {
+      const y = Math.floor(Math.random() * 9);
+      const x = Math.floor(Math.random() * 9);
+      if (bombMap[y][x] === 0) {
+        bombMap[y][x] = 1;
+        break;
+      }
+    }
   };
   //再帰関数
   //const addZeroAroundZero = (hoge: fuga) => ... // 再帰関数
@@ -93,7 +109,7 @@ const Home = () => {
               {color !== 0 && (
                 <div
                   className={styles.stone}
-                  style={{ background: color === 1 ? '#000' : '#fff' }}
+                  //style={{ background: color === 1 ? '#000' : '#fff' }}
                 />
               )}
             </div>
