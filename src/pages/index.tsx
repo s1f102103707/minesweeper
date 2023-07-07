@@ -89,6 +89,8 @@ const Home = () => {
     }
     console.log('bombMap');
     console.table(bombMap);
+    console.log('boardMap');
+    console.table(board);
   };
   //再帰関数
   //const addZeroAroundZero = (hoge: fuga) => ... // 再帰関数
@@ -107,6 +109,48 @@ const Home = () => {
   // 10 -> 石＋旗
   // 11 -> ボムセル
   const board: number[][] = [];
+
+  // ボードを初期化（-1）する
+  for (let y = 0; y < 9; y++) {
+    const row: number[] = [];
+    for (let x = 0; x < 9; x++) {
+      row.push(-1);
+    }
+    board.push(row);
+  }
+
+  // ボムの位置情報をもとにボードを更新する
+  for (let y = 0; y < 9; y++) {
+    for (let x = 0; x < 9; x++) {
+      if (userInputs[y][x] === 1) {
+        // ユーザーがクリックしたセル
+        if (bombMap[y][x] === 1) {
+          // ボムがあるセル
+          board[y][x] = 11;
+        } else {
+          // ボムがないセル
+          let count = 0;
+          for (const [dx, dy] of directions) {
+            const nx = x + dx;
+            const ny = y + dy;
+            if (nx >= 0 && nx < 9 && ny >= 0 && ny < 9 && bombMap[ny][nx] === 1) {
+              count++;
+            }
+          }
+          board[y][x] = count;
+        }
+      } else {
+        // ユーザーがクリックしていないセル
+        if (bombMap[y][x] === 1) {
+          // ボムがあるセル
+          board[y][x] = 9;
+        } else {
+          // ボムがないセル
+          board[y][x] = 0;
+        }
+      }
+    }
+  }
 
   return (
     <div className={styles.container}>
