@@ -114,7 +114,12 @@ const Home = () => {
   for (let y = 0; y < 9; y++) {
     const row: number[] = [];
     for (let x = 0; x < 9; x++) {
-      row.push(-1);
+      if (userInputs[y][x] === 1) {
+        //クリックされている場合は0に変更する
+        row.push(0);
+      } else {
+        row.push(-1);
+      }
     }
     board.push(row);
   }
@@ -139,15 +144,20 @@ const Home = () => {
           }
           board[y][x] = count;
         }
+      } else if (userInputs[y][x] === 2) {
+        board[y][x] = 9;
+      } else if (userInputs[y][x] === 3) {
+        board[y][x] = 10;
       } else {
+        //userInputs[y][x] === 0
         // ユーザーがクリックしていないセル
-        if (bombMap[y][x] === 1) {
+        if (bombMap[y][x] === 0) {
           // ボムがあるセル
-          board[y][x] = 9;
-        } else {
-          // ボムがないセル
-          board[y][x] = 0;
-        }
+          board[y][x] = -1;
+        } //else {
+        //   // ボムがないセル
+        //   board[y][x] = 0;
+        // }
       }
     }
   }
