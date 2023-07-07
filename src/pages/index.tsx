@@ -73,15 +73,22 @@ const Home = () => {
     updatedUserInput[y][x] = 1;
     setUserInputs(updatedUserInput);
 
-    //爆弾の設置
-    for (let i = 0; i < bombCount; i++) {
-      const y = Math.floor(Math.random() * 9);
-      const x = Math.floor(Math.random() * 9);
-      if (bombMap[y][x] === 0) {
-        bombMap[y][x] = 1;
-        break;
+    if (isPlayed) {
+      // 爆弾の設置
+      for (let i = 0; i < bombCount; i++) {
+        let placed = false;
+        while (!placed) {
+          const newY = Math.floor(Math.random() * 9);
+          const newX = Math.floor(Math.random() * 9);
+          if (bombMap[newY][newX] === 0) {
+            bombMap[newY][newX] = 1;
+            placed = true;
+          }
+        }
       }
     }
+    console.log('bombMap');
+    console.table(bombMap);
   };
   //再帰関数
   //const addZeroAroundZero = (hoge: fuga) => ... // 再帰関数
@@ -89,6 +96,7 @@ const Home = () => {
   //const reset = () => ...
 
   const isPlaying = userInputs.some((row) => row.some((input) => input !== 0));
+  const isPlayed = userInputs.flat().filter((input) => input === 1).length === 1;
   const isFailure = userInputs.some((row, y) =>
     row.some((input, x) => input === 1 && bombMap[y][x] === 1)
   );
