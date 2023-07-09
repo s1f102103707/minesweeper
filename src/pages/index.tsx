@@ -88,35 +88,18 @@ const Home = () => {
       }
     }
 
-    // ユーザーがクリックしたセルの周りの8方向の座標を取得
-    const clickcell = (x: number, y: number) => {
-      const surroundingCoordinates = directions.map(([dx, dy]) => [x + dx, y + dy]);
-      if (surroundingCoordinates.every(([nx, ny]) => (bombMap[ny][nx] = 0))) {
-        surroundingCoordinates.forEach(([nx, ny]) => {
-          board[ny][nx] = 0;
-        });
+    //爆弾の数を数える
+    const count = (x: number, y: number, bombMap: number[][]) => {
+      let count = 0;
+      for (const [dx, dy] of directions) {
+        const nx = x + dx;
+        const ny = y + dy;
+        if (nx >= 0 && nx < 9 && ny >= 0 && ny < 9 && bombMap[ny][nx] === 1) {
+          count++;
+        }
       }
+      return count;
     };
-
-    // 隣接するセルの座標を計算し、再帰的に開示する
-    for (const [dx, dy] of directions) {
-      const nx = x + dx;
-      const ny = y + dy;
-      clickcell(nx, ny);
-    }
-
-    // 周りのセルが全てボムでない場合、対応するボードの座標を0に設定
-    // const isAllNotBomb = surroundingCoordinates.every(([nx, ny]) => (bombMap[ny][nx] = 0));
-    // if (isAllNotBomb) {
-    //   for (const [nx, ny] of surroundingCoordinates) {
-    //     board[ny][nx] = 0;
-    //   }
-    // }
-
-    // console.log('bombMap');
-    // console.table(bombMap);
-    // console.log('board');
-    // console.table(board);
   };
   //再帰関数
   //const addZeroAroundZero = (hoge: fuga) => ... // 再帰関数
