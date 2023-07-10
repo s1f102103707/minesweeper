@@ -100,6 +100,11 @@ const Home = () => {
       }
       return count;
     };
+
+    if (bombMap[y][x] === 0) {
+      let numbombs = 0;
+      numbombs = count(x, y, bombMap);
+    }
   };
   //再帰関数
   //const addZeroAroundZero = (hoge: fuga) => ... // 再帰関数
