@@ -46,36 +46,57 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
-  //const board: number[][] = [];
-  //let zeroList: { x: number; y: number }[]
-  //for () {
-  //zeroList = // board + directions + userInputs + bombMap
-  //}
-  //let openedCount: number
-  //for () {
-  //openedCount = // board
-  //}
-  //const isSuccess = // openedCount + bombCount
-  //let isFailure: boolean
-  //for () {
-  //isFailure = // userInputs + bombMap
-  //}
-  //let isStarted: boolean
-  //for () {
-  //isStarted = // userInputs
-  //}
+  const onClick = (x: number, y: number) => {
+    console.log(x, y);
+    const newMap: number[][] = JSON.parse(JSON.stringify(userInputs));
 
-  
+    const updatedUserInput = [...userInputs];
+    updatedUserInput[y][x] = 1;
+    setUserInputs(updatedUserInput);
+
+    if (isPlayed) {
+      // 爆弾の設置
+      for (let i = 0; i < bombCount; i++) {
+        let placed = false;
+        while (!placed) {
+          const newY = Math.floor(Math.random() * 9);
+          const newX = Math.floor(Math.random() * 9);
+          if (bombMap[newY][newX] === 0) {
+            bombMap[newY][newX] = 1;
+            placed = true;
+          }
+        }
+      }
+    }
+
+    //爆弾の数を数える
+    const count = (x: number, y: number, bombMap: number[][]) => {
+      let count = 0;
+      for (const [dx, dy] of directions) {
+        const nx = x + dx;
+        const ny = y + dy;
+        if (nx >= 0 && nx < 9 && ny >= 0 && ny < 9 && bombMap[ny][nx] === 1) {
+          count++;
+        }
+      }
+      return count;
+    };
+
+    if (bombMap[y][x] === 0) {
+      let numbombs = 0;
+      numbombs = count(x, y, bombMap);
+    }
+  };
   //再帰関数
   //const addZeroAroundZero = (hoge: fuga) => ... // 再帰関数
   //const clickStone = (x: number, y: number) => ...
   //const reset = () => ...
 
-  //const isPlaying = userInputs.some((row) => row.some((input) => input !== 0));
+  const isPlaying = userInputs.some((row) => row.some((input) => input !== 0));
   const isPlayed = userInputs.flat().filter((input) => input === 1).length === 1;
-  // const isFailure = userInputs.some((row, y) =>
-  //   row.some((input, x) => input === 1 && bombMap[y][x] === 1)
-  // );
+  const isFailure = userInputs.some((row, y) =>
+    row.some((input, x) => input === 1 && bombMap[y][x] === 1)
+  );
   // -1 -> 石
   // 0 -> 画像なしセル
   // 1~8 -> 数字セル
@@ -116,6 +137,22 @@ const Home = () => {
               count++;
             }
           }
+          if (count === 0) {
+            const chein = (x: number, y: number) => {
+              const zerolist = [[x, y]];
+
+              for (const [dx, dy] of directions) {
+                const mx = x + dx;
+                const my = y + dy;
+                if (mx >= 0 && mx < 9 && my >= 0 && my < 9) {
+                  zerolist.push([mx, my]);
+                }
+              }
+              zerolist.forEach(([ix, iy]) => {
+                board[iy][ix] = 0; // Set all the cells pointed in zerolist to 0
+              });
+            };
+          }
           board[y][x] = count;
         }
       } else if (userInputs[y][x] === 2) {
@@ -140,82 +177,22 @@ const Home = () => {
   console.log('board');
   console.table(board);
 
-  const onClick = (x: number, y: number) => {
-    console.log(x, y);
-    const newMap: number[][] = JSON.parse(JSON.stringify(userInputs));
-
-    const updatedUserInput = [...userInputs];
-    updatedUserInput[y][x] = 1;
-    setUserInputs(updatedUserInput);
-
-    if (isPlayed) {
-      // 爆弾の設置
-      for (let i = 0; i < bombCount; i++) {
-        let placed = false;
-        while (!placed) {
-          const newY = Math.floor(Math.random() * 9);
-          const newX = Math.floor(Math.random() * 9);
-          if (bombMap[newY][newX] === 0) {
-            bombMap[newY][newX] = 1;
-            placed = true;
-          }
-        }
-      }
-    }
-
-    //爆弾の数を数える
-    const count = (x: number, y: number, bombMap: number[][]) => {
-      let count = 0;
-      for (const [dx, dy] of directions) {
-        const nx = x + dx;
-        const ny = y + dy;
-        if (nx >= 0 && nx < 9 && ny >= 0 && ny < 9 && bombMap[ny][nx] === 1) {
-          count++;
-        }
-      }
-      return count;
-    };
-
-    // const getAdjacentCoordinates = (x: number, y: number) => {
-    //   const coordinates = [[x, y]];
-  
-    //   for (const [dx, dy] of directions) {
-    //       const mx = x + dx;
-    //       const my = y + dy;
-    //       if (mx >= 0 && mx < 9 && my >= 0 && my < 9) {
-    //           coordinates.push([mx, my]);
-    //       }
-    //   }
-  
-    //   return coordinates;
-    // };
-
-    // if (bombMap[y][x] === 0) {
-    //   const bombCount = count(x,y,bombMap);
-    //   if (bombCount !==0) {
-
-    //   }
-    //   if (bombCount === 0) {
-    //     //クリックした座標と隣接する8方向の座標をリスト化する
-
-    //   }
-
-    //   }
-
-    }
-  };
-  return(
+  return (
     <div className={styles.container}>
       <div className={styles.board}>
-        {userInputs.map((row, y) =>
+        {board.map((row, y) =>
           row.map((color, x) => (
             <div className={styles.cell} key={`${x}-${y}`} onClick={() => onClick(x, y)}>
-              {color !== 0 && (
-                <div
-                  className={styles.stone}
-                  //style={{ background: color === 1 ? '#000' : '#fff' }}
-                />
-              )}
+              {color === 11 && <div className={styles.bom} />}
+              {color === 0 && <div className={styles.stone0} />}
+              {color === 1 && <div className={styles.stone1} />}
+              {color === 2 && <div className={styles.stone2} />}
+              {color === 3 && <div className={styles.stone3} />}
+              {color === 4 && <div className={styles.stone4} />}
+              {color === 5 && <div className={styles.stone5} />}
+              {color === 6 && <div className={styles.stone6} />}
+              {color === 7 && <div className={styles.stone7} />}
+              {color === 8 && <div className={styles.stone8} />}
             </div>
           ))
         )}
