@@ -88,6 +88,37 @@ const Home = () => {
     }
   };
   //再帰関数
+  const recursion = (x: number, y: number) => {
+    let count = 0;
+
+    for (const [dx, dy] of directions) {
+      // for (const w of directions) {
+      //   x + w[0];
+      // }
+      const nx = x + dx;
+      const ny = y + dy;
+      if (nx >= 0 && nx < 9 && ny >= 0 && ny < 9 && bombMap[ny][nx] === 1) {
+        count++;
+      }
+    }
+    if (count === 0) {
+      const chein = (x: number, y: number) => {
+        const zerolist = [[x, y]];
+
+        for (const [dx, dy] of directions) {
+          const mx = x + dx;
+          const my = y + dy;
+          if (mx >= 0 && mx < 9 && my >= 0 && my < 9) {
+            zerolist.push([mx, my]);
+          }
+        }
+        zerolist.forEach(([ix, iy]) => {
+          board[iy][ix] = 0; // Set all the cells pointed in zerolist to 0
+        });
+      };
+      return;
+    }
+  };
   //const addZeroAroundZero = (hoge: fuga) => ... // 再帰関数
   //const clickStone = (x: number, y: number) => ...
   //const reset = () => ...
@@ -128,9 +159,13 @@ const Home = () => {
           // ボムがあるセル
           board[y][x] = 11;
         } else {
+          //再帰いれる
           // ボムがないセル
           let count = 0;
           for (const [dx, dy] of directions) {
+            // for (const w of directions) {
+            //   x + w[0];
+            // }
             const nx = x + dx;
             const ny = y + dy;
             if (nx >= 0 && nx < 9 && ny >= 0 && ny < 9 && bombMap[ny][nx] === 1) {
