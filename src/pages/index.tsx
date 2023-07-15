@@ -87,38 +87,56 @@ const Home = () => {
       numbombs = count(x, y, bombMap);
     }
   };
-  //再帰関数
-  const recursion = (x: number, y: number) => {
-    let count = 0;
 
+  const chein = (x: number, y: number) => {
+    const zerolist = [[x, y]];
     for (const [dx, dy] of directions) {
-      // for (const w of directions) {
-      //   x + w[0];
-      // }
-      const nx = x + dx;
-      const ny = y + dy;
-      if (nx >= 0 && nx < 9 && ny >= 0 && ny < 9 && bombMap[ny][nx] === 1) {
-        count++;
+      const mx = x + dx;
+      const my = y + dy;
+      if (mx >= 0 && mx < 9 && my >= 0 && my < 9) {
+        zerolist.push([mx, my]);
       }
     }
-    if (count === 0) {
-      const chein = (x: number, y: number) => {
-        const zerolist = [[x, y]];
-
-        for (const [dx, dy] of directions) {
-          const mx = x + dx;
-          const my = y + dy;
-          if (mx >= 0 && mx < 9 && my >= 0 && my < 9) {
-            zerolist.push([mx, my]);
-          }
-        }
-        zerolist.forEach(([ix, iy]) => {
-          board[iy][ix] = 0; // Set all the cells pointed in zerolist to 0
-        });
-      };
-      return;
+    for (let i = 0; i < zerolist.length; i++) {
+      const [ix, iy] = zerolist[i];
+      board[iy][ix] = 0;
     }
   };
+  //再帰関数
+  // const recursion = (x: number, y: number) => {
+  //   let count = 0;
+
+  //   for (const [dx, dy] of directions) {
+  //     // for (const w of directions) {
+  //     //   x + w[0];
+  //     // }
+  //     const nx = x + dx;
+  //     const ny = y + dy;
+  //     if (nx >= 0 && nx < 9 && ny >= 0 && ny < 9 && bombMap[ny][nx] === 1) {
+  //       count++;
+  //     }
+  //   }
+  //   if (count === 0) {
+  //
+  //     const chein = (x: number, y: number) => {
+  //       const zerolist = [[x, y]];
+
+  //       for (const [dx, dy] of directions) {
+  //         const mx = x + dx;
+  //         const my = y + dy;
+  //         if (mx >= 0 && mx < 9 && my >= 0 && my < 9) {
+  //           zerolist.push([mx, my]);
+  //         }
+  //       }
+  //下のfor文が一気に開ける
+  //       for (let i = 0; i < zerolist.length; i++) {
+  //         const [ix, iy] = zerolist[i];
+  //         board[iy][ix] = 0;
+  //       }
+  //     };
+  //     return;
+  //   }
+  // };
   //const addZeroAroundZero = (hoge: fuga) => ... // 再帰関数
   //const clickStone = (x: number, y: number) => ...
   //const reset = () => ...
@@ -183,9 +201,10 @@ const Home = () => {
                   zerolist.push([mx, my]);
                 }
               }
-              zerolist.forEach(([ix, iy]) => {
-                board[iy][ix] = 0; // Set all the cells pointed in zerolist to 0
-              });
+              for (let i = 0; i < zerolist.length; i++) {
+                const [ix, iy] = zerolist[i];
+                board[iy][ix] = 0;
+              }
             };
           }
           board[y][x] = count;
