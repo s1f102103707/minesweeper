@@ -25,7 +25,7 @@
   margin: 0;
 }
 
-.stone {
+.icon {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -48,106 +48,6 @@
   background-position: -300px;
 }
 
-.stone0 {
-  position: relative;
-  width: 30px;
-  height: 30px;
-  border: 1px solid black;
-  margin: 0;
-}
-
-.stone1 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: url('~/assets/images/icons.png') no-repeat;
-  background-position: 0;
-}
-
-.stone2 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: url('~/assets/images/icons.png') no-repeat;
-  background-position: -30px;
-}
-
-.stone3 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: url('~/assets/images/icons.png') no-repeat;
-  background-position: -60px;
-}
-
-.stone4 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: url('~/assets/images/icons.png') no-repeat;
-  background-position: -90px;
-}
-
-.stone5 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: url('~/assets/images/icons.png') no-repeat;
-  background-position: -120px;
-}
-
-.stone6 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: url('~/assets/images/icons.png') no-repeat;
-  background-position: -150px;
-}
-
-.stone7 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: url('~/assets/images/icons.png') no-repeat;
-  background-position: -180px;
-}
-
-.stone8 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: url('~/assets/images/icons.png') no-repeat;
-  background-position: -210px;
+.cell1 {
+  border: outset 10px;
 }

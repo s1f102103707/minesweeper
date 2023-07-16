@@ -46,127 +46,60 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
-  const onClick = (x: number, y: number) => {
-    console.log(x, y);
-    const newMap: number[][] = JSON.parse(JSON.stringify(userInputs));
+  const updatedUserInput: (0 | 1 | 2 | 3)[][] = JSON.parse(JSON.stringify(userInputs));
+  const newBombMap: number[][] = JSON.parse(JSON.stringify(bombMap));
+  //爆弾の数を数える
+  const count = (x: number, y: number): number => {
+    let count = 0;
+    for (const [dx, dy] of directions) {
+      const nx = x + dx;
+      const ny = y + dy;
+      if (nx >= 0 && nx < 9 && ny >= 0 && ny < 9 && bombMap[ny][nx] === 1) {
+        count++;
+      }
+    }
+    return count;
+  };
 
-    const updatedUserInput = [...userInputs];
-    updatedUserInput[y][x] = 1;
-    setUserInputs(updatedUserInput);
-
-    if (isPlayed) {
-      // 爆弾の設置
-      for (let i = 0; i < bombCount; i++) {
-        let placed = false;
-        while (!placed) {
-          const newY = Math.floor(Math.random() * 9);
-          const newX = Math.floor(Math.random() * 9);
-          if (bombMap[newY][newX] === 0) {
-            bombMap[newY][newX] = 1;
-            placed = true;
+  const chein = (x: number, y: number) => {
+    board[y][x] = count(x, y);
+    if (count(x, y) === 0) {
+      for (const [dx, dy] of directions) {
+        const mx = x + dx;
+        const my = y + dy;
+        if (mx >= 0 && mx < 9 && my >= 0 && my < 9) {
+          if (board[my][mx] === -1) {
+            chein(mx, my);
           }
         }
       }
     }
-
-    //爆弾の数を数える
-    const count = (x: number, y: number, bombMap: number[][]) => {
-      let count = 0;
-      for (const [dx, dy] of directions) {
-        const nx = x + dx;
-        const ny = y + dy;
-        if (nx >= 0 && nx < 9 && ny >= 0 && ny < 9 && bombMap[ny][nx] === 1) {
-          count++;
-        }
-      }
-      return count;
-    };
-
-    if (bombMap[y][x] === 0) {
-      let numbombs = 0;
-      numbombs = count(x, y, bombMap);
-    }
   };
 
-  const chein = (x: number, y: number) => {
-    const zerolist = [[x, y]];
-    for (const [dx, dy] of directions) {
-      const mx = x + dx;
-      const my = y + dy;
-      if (mx >= 0 && mx < 9 && my >= 0 && my < 9) {
-        zerolist.push([mx, my]);
-      }
-    }
-    for (let i = 0; i < zerolist.length; i++) {
-      const [ix, iy] = zerolist[i];
-      board[iy][ix] = 0;
-    }
-  };
-  //再帰関数
-  // const recursion = (x: number, y: number) => {
-  //   let count = 0;
-
-  //   for (const [dx, dy] of directions) {
-  //     // for (const w of directions) {
-  //     //   x + w[0];
-  //     // }
-  //     const nx = x + dx;
-  //     const ny = y + dy;
-  //     if (nx >= 0 && nx < 9 && ny >= 0 && ny < 9 && bombMap[ny][nx] === 1) {
-  //       count++;
-  //     }
-  //   }
-  //   if (count === 0) {
-  //
-  //     const chein = (x: number, y: number) => {
-  //       const zerolist = [[x, y]];
-
-  //       for (const [dx, dy] of directions) {
-  //         const mx = x + dx;
-  //         const my = y + dy;
-  //         if (mx >= 0 && mx < 9 && my >= 0 && my < 9) {
-  //           zerolist.push([mx, my]);
-  //         }
-  //       }
-  //下のfor文が一気に開ける
-  //       for (let i = 0; i < zerolist.length; i++) {
-  //         const [ix, iy] = zerolist[i];
-  //         board[iy][ix] = 0;
-  //       }
-  //     };
-  //     return;
-  //   }
-  // };
-  //const addZeroAroundZero = (hoge: fuga) => ... // 再帰関数
-  //const clickStone = (x: number, y: number) => ...
-  //const reset = () => ...
-
-  const isPlaying = userInputs.some((row) => row.some((input) => input !== 0));
-  const isPlayed = userInputs.flat().filter((input) => input === 1).length === 1;
+  // const isPlaying = userInputs.some((row) => row.some((input) => input !== 0));
+  const isPlayed = userInputs.flat().filter((input) => input === 1).length === 0;
   const isFailure = userInputs.some((row, y) =>
     row.some((input, x) => input === 1 && bombMap[y][x] === 1)
   );
+  //const isWon =顔が出るようにする
+
   // -1 -> 石
   // 0 -> 画像なしセル
   // 1~8 -> 数字セル
   // 9 -> 石＋はてな
   // 10 -> 石＋旗
   // 11 -> ボムセル
-  const board: number[][] = [];
-
-  // ボードを初期化（-1）する
-  for (let y = 0; y < 9; y++) {
-    const row: number[] = [];
-    for (let x = 0; x < 9; x++) {
-      if (userInputs[y][x] === 1) {
-        //クリックされている場合は0に変更する
-        row.push(0);
-      } else {
-        row.push(-1);
-      }
-    }
-    board.push(row);
-  }
+  const board: number[][] = [
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+  ];
 
   // ボムの位置情報をもとにボードを更新する
   for (let y = 0; y < 9; y++) {
@@ -179,50 +112,12 @@ const Home = () => {
         } else {
           //再帰いれる
           // ボムがないセル
-          let count = 0;
-          for (const [dx, dy] of directions) {
-            // for (const w of directions) {
-            //   x + w[0];
-            // }
-            const nx = x + dx;
-            const ny = y + dy;
-            if (nx >= 0 && nx < 9 && ny >= 0 && ny < 9 && bombMap[ny][nx] === 1) {
-              count++;
-            }
-          }
-          if (count === 0) {
-            const chein = (x: number, y: number) => {
-              const zerolist = [[x, y]];
-
-              for (const [dx, dy] of directions) {
-                const mx = x + dx;
-                const my = y + dy;
-                if (mx >= 0 && mx < 9 && my >= 0 && my < 9) {
-                  zerolist.push([mx, my]);
-                }
-              }
-              for (let i = 0; i < zerolist.length; i++) {
-                const [ix, iy] = zerolist[i];
-                board[iy][ix] = 0;
-              }
-            };
-          }
-          board[y][x] = count;
+          chein(x, y);
         }
       } else if (userInputs[y][x] === 2) {
         board[y][x] = 9;
       } else if (userInputs[y][x] === 3) {
         board[y][x] = 10;
-      } else {
-        //userInputs[y][x] === 0
-        // ユーザーがクリックしていないセル
-        if (bombMap[y][x] === 0) {
-          // ボムがあるセル
-          board[y][x] = -1;
-        } //else {
-        //   // ボムがないセル
-        //   board[y][x] = 0;
-        // }
       }
     }
   }
@@ -230,25 +125,54 @@ const Home = () => {
   console.table(bombMap);
   console.log('board');
   console.table(board);
+  const onClickR = (x: number, y: number) => {
+    document.getElementsByTagName('html')[0].oncontextmenu = () => false;
+  };
+  const onClick = (x: number, y: number) => {
+    console.log(x, y);
+    updatedUserInput[y][x] = 1;
+    setUserInputs(updatedUserInput);
 
+    if (isPlayed) {
+      // 爆弾の設置
+      for (let i = 0; i < bombCount; i++) {
+        let placed = false;
+        while (!placed) {
+          const newY = Math.floor(Math.random() * 9);
+          const newX = Math.floor(Math.random() * 9);
+          if (newBombMap[newY][newX] === 0 && !(newX === x && newY === y)) {
+            newBombMap[newY][newX] = 1;
+            placed = true;
+          }
+        }
+      }
+      console.log('newbombmap');
+      console.table(newBombMap);
+      setBombMap(newBombMap);
+    }
+  };
   return (
     <div className={styles.container}>
       <div className={styles.board}>
         {board.map((row, y) =>
-          row.map((color, x) => (
-            <div className={styles.cell} key={`${x}-${y}`} onClick={() => onClick(x, y)}>
-              {color === 11 && <div className={styles.bom} />}
-              {color === 0 && <div className={styles.stone0} />}
-              {color === 1 && <div className={styles.stone1} />}
-              {color === 2 && <div className={styles.stone2} />}
-              {color === 3 && <div className={styles.stone3} />}
-              {color === 4 && <div className={styles.stone4} />}
-              {color === 5 && <div className={styles.stone5} />}
-              {color === 6 && <div className={styles.stone6} />}
-              {color === 7 && <div className={styles.stone7} />}
-              {color === 8 && <div className={styles.stone8} />}
-            </div>
-          ))
+          row.map((color, x) =>
+            color === -1 ? (
+              <div
+                className={styles.cell1}
+                key={`${x}-${y}`}
+                onClick={() => onClick(x, y)}
+                onContextMenu={() => onClickR(x, y)}
+              />
+            ) : (
+              <div className={styles.cell} key={`${x}-${y}`} onClick={() => onClick(x, y)}>
+                {color === 11 && <div className={styles.bom} />}
+
+                {color > -1 && color < 9 && (
+                  <div className={styles.icon} style={{ backgroundPositionX: 30 * -color + 30 }} />
+                )}
+              </div>
+            )
+          )
         )}
       </div>
     </div>
