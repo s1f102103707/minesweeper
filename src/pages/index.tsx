@@ -126,7 +126,25 @@ const Home = () => {
   console.log('board');
   console.table(board);
   const onClickR = (x: number, y: number) => {
-    document.getElementsByTagName('html')[0].oncontextmenu = () => false;
+    // event.preventDefault(); // デフォルトの右クリックメニューを無効にする
+    switch (userInputs[y][x]) {
+      case 0:
+        // 未クリックからはてなへ
+        updatedUserInput[y][x] = 2;
+        break;
+      case 1:
+        // 左クリックは無視する（変更無し）
+        break;
+      case 2:
+        // はてなから旗へ
+        updatedUserInput[y][x] = 3;
+        break;
+      case 3:
+        // 旗から未クリックへ
+        updatedUserInput[y][x] = 0;
+        break;
+    }
+    setUserInputs(updatedUserInput);
   };
   const onClick = (x: number, y: number) => {
     console.log(x, y);
