@@ -126,6 +126,7 @@ const Home = () => {
   console.log('board');
   console.table(board);
   const onClickR = (x: number, y: number) => {
+    document.getElementsByTagName('html')[0].oncontextmenu = () => false;
     // event.preventDefault(); // デフォルトの右クリックメニューを無効にする
     switch (userInputs[y][x]) {
       case 0:
@@ -185,7 +186,7 @@ const Home = () => {
               <div className={styles.cell} key={`${x}-${y}`} onClick={() => onClick(x, y)}>
                 {color === 11 && <div className={styles.bom} />}
 
-                {color > -1 && color < 9 && (
+                {color > -1 && color < 10 && (
                   <div className={styles.icon} style={{ backgroundPositionX: 30 * -color + 30 }} />
                 )}
               </div>
