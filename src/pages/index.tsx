@@ -146,6 +146,18 @@ const Home = () => {
         break;
     }
     setUserInputs(updatedUserInput);
+    // 右クリックしたセルのboard値を変更する
+    switch (board[y][x]) {
+      case -1:
+        board[y][x] = 9;
+        break;
+      case 9:
+        board[y][x] = 10;
+        break;
+      case 10:
+        board[y][x] = -1;
+        break;
+    }
   };
   const onClick = (x: number, y: number) => {
     console.log(x, y);
@@ -175,7 +187,7 @@ const Home = () => {
       <div className={styles.board}>
         {board.map((row, y) =>
           row.map((color, x) =>
-            color === -1 ? (
+            color === -1 || color === 9 || color === 10 ? (
               <div
                 className={styles.cell1}
                 key={`${x}-${y}`}
@@ -186,7 +198,7 @@ const Home = () => {
               <div className={styles.cell} key={`${x}-${y}`} onClick={() => onClick(x, y)}>
                 {color === 11 && <div className={styles.bom} />}
 
-                {color > -1 && color < 10 && (
+                {color > -1 && color < 11 && (
                   <div className={styles.icon} style={{ backgroundPositionX: 30 * -color + 30 }} />
                 )}
               </div>
