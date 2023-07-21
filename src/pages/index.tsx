@@ -127,11 +127,13 @@ const Home = () => {
   console.table(board);
   const onClickR = (x: number, y: number) => {
     document.getElementsByTagName('html')[0].oncontextmenu = () => false;
-    // event.preventDefault(); // デフォルトの右クリックメニューを無効にする
+    // event.preventDefault();
+
     switch (userInputs[y][x]) {
       case 0:
         // 未クリックからはてなへ
         updatedUserInput[y][x] = 2;
+        board[y][x] = 9;
         break;
       case 1:
         // 左クリックは無視する（変更無し）
@@ -139,25 +141,15 @@ const Home = () => {
       case 2:
         // はてなから旗へ
         updatedUserInput[y][x] = 3;
+        board[y][x] = 10;
         break;
       case 3:
         // 旗から未クリックへ
         updatedUserInput[y][x] = 0;
-        break;
-    }
-    setUserInputs(updatedUserInput);
-    // 右クリックしたセルのboard値を変更する
-    switch (board[y][x]) {
-      case -1:
-        board[y][x] = 9;
-        break;
-      case 9:
-        board[y][x] = 10;
-        break;
-      case 10:
         board[y][x] = -1;
         break;
     }
+    setUserInputs(updatedUserInput);
   };
   const onClick = (x: number, y: number) => {
     console.log(x, y);
@@ -193,16 +185,17 @@ const Home = () => {
                 key={`${x}-${y}`}
                 onClick={() => onClick(x, y)}
                 onContextMenu={() => onClickR(x, y)}
-              />
+              >
+                {color > 8 && color < 11 && (
+                  <div className={styles.icon} style={{ backgroundPositionX: 30 * -color + 30 }} />
+                )}
+              </div>
             ) : (
               <div className={styles.cell} key={`${x}-${y}`} onClick={() => onClick(x, y)}>
                 {color === 11 && <div className={styles.bom} />}
 
                 {color > 0 && color < 11 && (
                   <div className={styles.icon} style={{ backgroundPositionX: 30 * -color + 30 }} />
-                )}
-                {color > -2 && color < 1 && (
-                  <div className={styles.icon} style={{ backgroundPositionY: -30 }} />
                 )}
               </div>
             )
