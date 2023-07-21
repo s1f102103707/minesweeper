@@ -198,8 +198,11 @@ const Home = () => {
               <div className={styles.cell} key={`${x}-${y}`} onClick={() => onClick(x, y)}>
                 {color === 11 && <div className={styles.bom} />}
 
-                {color > -1 && color < 11 && (
+                {color > 0 && color < 11 && (
                   <div className={styles.icon} style={{ backgroundPositionX: 30 * -color + 30 }} />
+                )}
+                {color > -2 && color < 1 && (
+                  <div className={styles.icon} style={{ backgroundPositionY: -30 }} />
                 )}
               </div>
             )
