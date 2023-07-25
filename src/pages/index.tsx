@@ -125,10 +125,13 @@ const Home = () => {
   console.table(bombMap);
   console.log('board');
   console.table(board);
-  const onClickR = (x: number, y: number) => {
-    document.getElementsByTagName('html')[0].oncontextmenu = () => false;
-    // event.preventDefault();
-
+  const onRightClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    x: number,
+    y: number
+  ) => {
+    console.log('migikuri ');
+    event.preventDefault();
     switch (userInputs[y][x]) {
       case 0:
         // 未クリックからはてなへ
@@ -151,6 +154,33 @@ const Home = () => {
     }
     setUserInputs(updatedUserInput);
   };
+  // const onClickR = (x: number, y: number) => {
+
+  //   document.getElementsByTagName('html')[0].oncontextmenu = () => false;
+  //   // event.preventDefault();
+
+  //   switch (userInputs[y][x]) {
+  //     case 0:
+  //       // 未クリックからはてなへ
+  //       updatedUserInput[y][x] = 2;
+  //       board[y][x] = 9;
+  //       break;
+  //     case 1:
+  //       // 左クリックは無視する（変更無し）
+  //       break;
+  //     case 2:
+  //       // はてなから旗へ
+  //       updatedUserInput[y][x] = 3;
+  //       board[y][x] = 10;
+  //       break;
+  //     case 3:
+  //       // 旗から未クリックへ
+  //       updatedUserInput[y][x] = 0;
+  //       board[y][x] = -1;
+  //       break;
+  //   }
+  //   setUserInputs(updatedUserInput);
+  // };
   const onClick = (x: number, y: number) => {
     console.log(x, y);
     updatedUserInput[y][x] = 1;
@@ -184,7 +214,7 @@ const Home = () => {
                 className={styles.cell1}
                 key={`${x}-${y}`}
                 onClick={() => onClick(x, y)}
-                onContextMenu={() => onClickR(x, y)}
+                onContextMenu={(e) => onRightClick(e, x, y)}
               >
                 {color > 8 && color < 11 && (
                   <div className={styles.icon} style={{ backgroundPositionX: 30 * -color + 30 }} />
