@@ -166,8 +166,22 @@ const Home = () => {
       setBombMap(newBombMap);
     }
   };
+  const reset = () => {
+    for (let y = 0; y < 9; y++) {
+      for (let x = 0; x < 9; x++) {
+        updatedUserInput[y][x] = 0;
+        newBombMap[y][x] = 0;
+        board[y][x] = -1;
+      }
+    }
+    setUserInputs(updatedUserInput);
+    setBombMap(newBombMap);
+  };
   return (
     <div className={styles.container}>
+      <button className={styles.generate} onClick={() => reset()}>
+        リセット
+      </button>
       <div className={styles.board}>
         {board.map((row, y) =>
           row.map((color, x) => (
