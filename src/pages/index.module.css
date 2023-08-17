@@ -49,5 +49,9 @@
 }
 
 .cell1 {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0;
   border: outset 10px;
 }

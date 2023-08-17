@@ -75,14 +75,7 @@ const Home = () => {
       }
     }
   };
-
-  // const isPlaying = userInputs.some((row) => row.some((input) => input !== 0));
   const isPlayed = userInputs.flat().filter((input) => input === 1).length === 0;
-  const isFailure = userInputs.some((row, y) =>
-    row.some((input, x) => input === 1 && bombMap[y][x] === 1)
-  );
-  //const isWon =顔が出るようにする
-
   // -1 -> 石
   // 0 -> 画像なしセル
   // 1~8 -> 数字セル
@@ -100,18 +93,22 @@ const Home = () => {
     [-1, -1, -1, -1, -1, -1, -1, -1, -1],
     [-1, -1, -1, -1, -1, -1, -1, -1, -1],
   ];
-
-  // ボムの位置情報をもとにボードを更新する
+  const yuubaku = () => {
+    for (let y = 0; y < 9; y++) {
+      for (let x = 0; x < 9; x++) {
+        if (bombMap[y][x] === 1) {
+          board[y][x] = 11;
+        }
+      }
+    }
+  };
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
       if (userInputs[y][x] === 1) {
-        // ユーザーがクリックしたセル
         if (bombMap[y][x] === 1) {
-          // ボムがあるセル
           board[y][x] = 11;
+          yuubaku();
         } else {
-          //再帰いれる
-          // ボムがないセル
           chein(x, y);
         }
       } else if (userInputs[y][x] === 2) {
@@ -125,69 +122,34 @@ const Home = () => {
   console.table(bombMap);
   console.log('board');
   console.table(board);
-  const onRightClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    x: number,
-    y: number
-  ) => {
-    console.log('migikuri ');
+  const onClickR = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, x: number, y: number) => {
     event.preventDefault();
-    switch (userInputs[y][x]) {
-      case 0:
-        // 未クリックからはてなへ
-        updatedUserInput[y][x] = 2;
-        board[y][x] = 9;
-        break;
-      case 1:
-        // 左クリックは無視する（変更無し）
-        break;
-      case 2:
-        // はてなから旗へ
-        updatedUserInput[y][x] = 3;
-        board[y][x] = 10;
-        break;
-      case 3:
-        // 旗から未クリックへ
-        updatedUserInput[y][x] = 0;
-        board[y][x] = -1;
-        break;
+    if (board[y][x] === 11 || board[y][x] === 10 || board[y][x] === 9 || board[y][x] === -1) {
+      switch (userInputs[y][x]) {
+        case 0:
+          updatedUserInput[y][x] = 2;
+          board[y][x] = 9;
+          break;
+        case 1:
+          break;
+        case 2:
+          updatedUserInput[y][x] = 3;
+          board[y][x] = 10;
+          break;
+        case 3:
+          updatedUserInput[y][x] = 0;
+          board[y][x] = -1;
+          break;
+      }
+      setUserInputs(updatedUserInput);
     }
-    setUserInputs(updatedUserInput);
   };
-  // const onClickR = (x: number, y: number) => {
-
-  //   document.getElementsByTagName('html')[0].oncontextmenu = () => false;
-  //   // event.preventDefault();
-
-  //   switch (userInputs[y][x]) {
-  //     case 0:
-  //       // 未クリックからはてなへ
-  //       updatedUserInput[y][x] = 2;
-  //       board[y][x] = 9;
-  //       break;
-  //     case 1:
-  //       // 左クリックは無視する（変更無し）
-  //       break;
-  //     case 2:
-  //       // はてなから旗へ
-  //       updatedUserInput[y][x] = 3;
-  //       board[y][x] = 10;
-  //       break;
-  //     case 3:
-  //       // 旗から未クリックへ
-  //       updatedUserInput[y][x] = 0;
-  //       board[y][x] = -1;
-  //       break;
-  //   }
-  //   setUserInputs(updatedUserInput);
-  // };
   const onClick = (x: number, y: number) => {
     console.log(x, y);
     updatedUserInput[y][x] = 1;
     setUserInputs(updatedUserInput);
 
     if (isPlayed) {
-      // 爆弾の設置
       for (let i = 0; i < bombCount; i++) {
         let placed = false;
         while (!placed) {
@@ -208,28 +170,20 @@ const Home = () => {
     <div className={styles.container}>
       <div className={styles.board}>
         {board.map((row, y) =>
-          row.map((color, x) =>
-            color === -1 || color === 9 || color === 10 ? (
-              <div
-                className={styles.cell1}
-                key={`${x}-${y}`}
-                onClick={() => onClick(x, y)}
-                onContextMenu={(e) => onRightClick(e, x, y)}
-              >
-                {color > 8 && color < 11 && (
-                  <div className={styles.icon} style={{ backgroundPositionX: 30 * -color + 30 }} />
-                )}
-              </div>
-            ) : (
-              <div className={styles.cell} key={`${x}-${y}`} onClick={() => onClick(x, y)}>
-                {color === 11 && <div className={styles.bom} />}
-
-                {color > 0 && color < 11 && (
-                  <div className={styles.icon} style={{ backgroundPositionX: 30 * -color + 30 }} />
-                )}
-              </div>
-            )
-          )
+          row.map((color, x) => (
+            <div
+              className={styles.cell}
+              key={`${x}-${y}`}
+              onClick={() => onClick(x, y)}
+              onContextMenu={(e) => onClickR(e, x, y)}
+            >
+              {color === 11 && <div className={styles.bom} />}
+              {color === -1 && <div className={styles.cell1} />}
+              {color > 0 && color < 11 && (
+                <div className={styles.icon} style={{ backgroundPositionX: 30 * -color + 30 }} />
+              )}
+            </div>
+          ))
         )}
       </div>
     </div>
