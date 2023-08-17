@@ -56,6 +56,15 @@
   border: outset 10px;
 }
 
-.generate {
-  margin: 0;
+.smile {
+  width: 30px;
+  height: 30px;
+  margin: 20px;
+  background: url('~/assets/images/icons.png') no-repeat;
+  background-color: grey;
+  background-position: -360px 0;
+  display: inline-block;
+  transform: scale(2, 2);
+  border: outset 1px;
+  border: 1px solid black;
 }

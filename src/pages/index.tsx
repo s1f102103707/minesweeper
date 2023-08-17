@@ -179,9 +179,11 @@ const Home = () => {
   };
   return (
     <div className={styles.container}>
-      <button className={styles.generate} onClick={() => reset()}>
-        リセット
-      </button>
+      <button
+        className={styles.smile}
+        style={{ backgroundPositionX: -12 * 30 + 30 }}
+        onClick={() => reset()}
+      />
       <div className={styles.board}>
         {board.map((row, y) =>
           row.map((color, x) => (
