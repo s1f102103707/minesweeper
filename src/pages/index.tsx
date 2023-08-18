@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './index.module.css';
 
 const Home = () => {
@@ -75,7 +75,18 @@ const Home = () => {
       }
     }
   };
+  const [timer, setTimer] = useState(0);
   const isPlayed = userInputs.flat().filter((input) => input === 1).length === 0;
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
+    if (isPlayed) {
+      intervalId = setInterval(() => {
+        setTimer((prevTimer) => prevTimer + 1);
+      }, 1000);
+    } else {
+      clearInterval(intervalId);
+    }
+  });
   // -1 -> 石
   // 0 -> 画像なしセル
   // 1~8 -> 数字セル
