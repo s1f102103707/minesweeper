@@ -169,7 +169,7 @@ const Home = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, [isPlaying]);
+  }, [isPlaying, isFailure]);
 
 
   const onClick = (x: number, y: number) => {
