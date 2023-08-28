@@ -21,7 +21,6 @@ const Home = () => {
 
   const [timer, setTimer] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  
 
   const directions = [
     [-1, 0],
@@ -162,7 +161,7 @@ const Home = () => {
     } else {
       clearInterval(intervalId);
     }
-    if(isFailure) {
+    if (isFailure) {
       clearInterval(intervalId);
     }
 
@@ -170,7 +169,6 @@ const Home = () => {
       clearInterval(intervalId);
     };
   }, [isPlaying, isFailure]);
-
 
   const onClick = (x: number, y: number) => {
     console.log(x, y);
