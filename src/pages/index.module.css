@@ -68,3 +68,8 @@
   border: outset 1px;
   border: 1px solid black;
 }
+
+.timer {
+  width: 100px;
+  height: 30px;
+}

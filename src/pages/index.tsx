@@ -19,6 +19,10 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
+  const [timer, setTimer] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  
+
   const directions = [
     [-1, 0],
     [-1, -1],
@@ -75,18 +79,6 @@ const Home = () => {
       }
     }
   };
-  const [timer, setTimer] = useState(0);
-  const isPlayed = userInputs.flat().filter((input) => input === 1).length === 0;
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout | undefined;
-    if (isPlayed) {
-      intervalId = setInterval(() => {
-        setTimer((prevTimer) => prevTimer + 1);
-      }, 1000);
-    } else {
-      clearInterval(intervalId);
-    }
-  });
   // -1 -> 石
   // 0 -> 画像なしセル
   // 1~8 -> 数字セル
@@ -155,10 +147,39 @@ const Home = () => {
       setUserInputs(updatedUserInput);
     }
   };
+  const isPlayed = userInputs.flat().filter((input) => input === 1).length === 0;
+  const isFailure = userInputs.some((row, y) =>
+    row.some((input, x) => input === 1 && bombMap[y][x] === 1)
+  );
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
+
+    if (isPlaying) {
+      intervalId = setInterval(() => {
+        setTimer((prevTimer) => prevTimer + 1);
+      }, 1000);
+    } else {
+      clearInterval(intervalId);
+    }
+    if(isFailure) {
+      clearInterval(intervalId);
+    }
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isPlaying]);
+
+
   const onClick = (x: number, y: number) => {
     console.log(x, y);
     updatedUserInput[y][x] = 1;
     setUserInputs(updatedUserInput);
+
+    if (!isPlaying) {
+      setIsPlaying(true);
+    }
 
     if (isPlayed) {
       for (let i = 0; i < bombCount; i++) {
@@ -195,6 +216,7 @@ const Home = () => {
         style={{ backgroundPositionX: -12 * 30 + 30 }}
         onClick={() => reset()}
       />
+      <div className={styles.timer}>{timer}</div>
       <div className={styles.board}>
         {board.map((row, y) =>
           row.map((color, x) => (
