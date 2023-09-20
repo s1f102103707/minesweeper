@@ -214,7 +214,7 @@ const Home = () => {
         style={{ backgroundPositionX: -12 * 30 + 30 }}
         onClick={() => reset()}
       />
-      <div className={styles.timer}>{timer}</div>
+      <div className={styles.timer}>{timer.toString().padStart(2, '0')}</div>
       <div className={styles.board}>
         {board.map((row, y) =>
           row.map((color, x) => (
